@@ -1,20 +1,32 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
+import getApiData from './utils/data.util';
+
+export type Country = {
+  name: { common: string };
+  cca2: string;
+  population: number;
+  flags: { png: string; alt: string };
+};
 const App = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState<Country[]>([]);
 
-  const onChangeHandler = e => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
     const searchValue = e.target.value.toLowerCase();
     setSearchValue(searchValue);
   };
 
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/lang/arabic')
-      .then(res => res.json())
-      .then(data => setCountries(data));
+    const getData = async () => {
+      const data = await getApiData<Country[]>(
+        'https://restcountries.com/v3.1/lang/arabic'
+      );
+      setCountries(data);
+    };
+    getData();
   }, []);
 
   const searchedCountries = countries.filter(country => {

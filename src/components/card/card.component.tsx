@@ -1,12 +1,17 @@
 import './card.styles.css';
-const Card = ({ country }) => {
+import { Country } from '../../App';
+
+type cardProps = {
+  country: Country;
+};
+
+const Card = ({ country }: cardProps) => {
   let countryName = country.name.common;
 
   if (countryName === 'Israel') return;
 
   const { population } = country;
   const { png, alt } = country.flags;
-  // const countryId = country.cca2;
 
   return (
     <div className='card-container'>
